@@ -8,7 +8,7 @@ const {
   topicData,
   userData,
 } = require("../db/data/test-data/index");
-const { expect } = require("@jest/globals");
+const fs = require("fs/promises");
 
 beforeEach(() => {
   seed({ topicData, userData, articleData, commentData });
@@ -16,6 +16,18 @@ beforeEach(() => {
 
 afterAll(() => {
   db.end();
+});
+
+describe.only("GET /api", () => {
+  it("200: responds with instruction on how to use endpoints", async () => {
+    const response = await request(app).get("/api");
+    const expectedOutput = await fs.readFile("./endpoints.json", "utf-8");
+    expect(response.status).toBe(200);
+    expect(response.body.endpoints).toHaveProperty("GET /api");
+    expect(response.body.endpoints).toHaveProperty("GET /api/topics");
+    expect(response.body.endpoints).toHaveProperty("GET /api/articles");
+    expect(response.body.endpoints).toEqual(JSON.parse(expectedOutput));
+  });
 });
 
 describe("GET /api/topics", () => {
