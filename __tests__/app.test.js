@@ -70,6 +70,7 @@ describe("GET /api/articles", () => {
   it("200: responds with all of the articles without body property and with comment_count property", async () => {
     const response = await request(app).get("/api/articles");
     expect(response.status).toBe(200);
+    expect(response.body.articles.length).toBe(13);
     response.body.articles.map((article) => {
       expect(article).toHaveProperty("author");
       expect(article).toHaveProperty("title");
