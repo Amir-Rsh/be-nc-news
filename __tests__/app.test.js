@@ -23,9 +23,6 @@ describe("GET /api", () => {
     const response = await request(app).get("/api");
     const expectedOutput = await fs.readFile("./endpoints.json", "utf-8");
     expect(response.status).toBe(200);
-    expect(response.body.endpoints).toHaveProperty("GET /api");
-    expect(response.body.endpoints).toHaveProperty("GET /api/topics");
-    expect(response.body.endpoints).toHaveProperty("GET /api/articles");
     expect(response.body.endpoints).toEqual(JSON.parse(expectedOutput));
   });
 });
@@ -42,7 +39,7 @@ describe("GET /api/topics", () => {
 });
 
 describe("GET /api/articles/:article_id", () => {
-  it.only("200: responds the requested article", async () => {
+  it("200: responds the requested article", async () => {
     const response = await request(app).get("/api/articles/1");
     expect(response.status).toBe(200);
     const foundArticle = response.body.article.article;
@@ -57,12 +54,12 @@ describe("GET /api/articles/:article_id", () => {
       "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700"
     );
   });
-  it.only("404: responds the appropriate message when article_id is valid but not in the database", async () => {
+  it("404: responds the appropriate message when article_id is valid but not in the database", async () => {
     const response = await request(app).get("/api/articles/999");
     expect(response.status).toBe(404);
     expect(response.body.msg).toBe("Not Found");
   });
-  it.only("400: responds the appropriate message when article_id is not valid", async () => {
+  it("400: responds the appropriate message when article_id is not valid", async () => {
     const response = await request(app).get("/api/articles/invalid");
     expect(response.status).toBe(400);
     expect(response.body.msg).toBe("Bad Request");
