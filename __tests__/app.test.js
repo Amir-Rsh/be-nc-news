@@ -86,3 +86,31 @@ describe("GET /api/articles", () => {
     });
   });
 });
+
+describe("GET /api/articles/:article_id/comments", () => {
+  it("200: responds the comments for the requested article ordered by created_at", async () => {
+    const response = await request(app).get("/api/articles/1/comments");
+    expect(response.status).toBe(200);
+    const comments = response.body.comments;
+    expect(comments.length).toBe(11);
+    comments.map((comment) => {
+      expect(comment).toHaveProperty("comment_id");
+      expect(comment).toHaveProperty("body");
+      expect(comment).toHaveProperty("article_id");
+      expect(comment).toHaveProperty("author");
+      expect(comment).toHaveProperty("votes");
+      expect(comment).toHaveProperty("created_at");
+    });
+    expect(comments).toBeSortedBy("created_at");
+  });
+  it("404: responds the appropriate message when article_id is valid but not in the database", async () => {
+    const response = await request(app).get("/api/articles/999/comments");
+    expect(response.status).toBe(404);
+    expect(response.body.msg).toBe("Not Found");
+  });
+  it("400: responds the appropriate message when article_id is not valid", async () => {
+    const response = await request(app).get("/api/articles/invalid/comments");
+    expect(response.status).toBe(400);
+    expect(response.body.msg).toBe("Bad Request");
+  });
+});
