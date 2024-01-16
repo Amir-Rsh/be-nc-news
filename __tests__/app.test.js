@@ -114,3 +114,41 @@ describe("GET /api/articles/:article_id/comments", () => {
     expect(response.body.msg).toBe("Bad Request");
   });
 });
+
+describe("POST /api/articles/:article_id/comments", () => {
+  it("201: responds with the posted comment and posts a new comment", async () => {
+    const newComment = { username: "butter_bridge", body: "testing the body" };
+    const response = await request(app)
+      .post("/api/articles/10/comments")
+      .send(newComment);
+    expect(response.status).toBe(201);
+    const comment = response.body.comment;
+    expect(comment.author).toBe(newComment.username);
+    expect(comment.body).toBe(newComment.body);
+    expect(comment.article_id).toBe(10);
+  });
+  it("404: responds with appropriate message when article_id is not found", async () => {
+    const newComment = { username: "butter_bridge", body: "testing the body" };
+    const response = await request(app)
+      .post("/api/articles/999/comments")
+      .send(newComment);
+    expect(response.status).toBe(404);
+    expect(response.body.msg).toBe("article not found");
+  });
+  it("400: responds with appropriate message when posted comment does not contain required properties", async () => {
+    const newComment = { body: "testing the body" };
+    const response = await request(app)
+      .post("/api/articles/10/comments")
+      .send(newComment);
+    expect(response.status).toBe(400);
+    expect(response.body.msg).toBe("Bad Request. Missing properties.");
+  });
+  it("400: responds with appropriate message when posted comment contains invalid property values", async () => {
+    const newComment = { username: 8777, body: 67 };
+    const response = await request(app)
+      .post("/api/articles/10/comments")
+      .send(newComment);
+    expect(response.status).toBe(400);
+    expect(response.body.msg).toBe("Bad Request");
+  });
+});

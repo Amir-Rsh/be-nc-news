@@ -13,3 +13,17 @@ exports.fetchCommentsById = async (article_id) => {
   }
   return comments.rows;
 };
+
+exports.postCommentsById = async (article_id, postedComment) => {
+  const newComment = await db.query(
+    `
+  INSERT INTO comments
+  (article_id, author, body)
+  VALUES
+  ($1, $2, $3)
+  RETURNING *
+  `,
+    [article_id, postedComment.username, postedComment.body]
+  );
+  return newComment.rows[0];
+};
