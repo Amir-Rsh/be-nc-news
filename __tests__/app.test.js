@@ -65,3 +65,23 @@ describe("GET /api/articles/:article_id", () => {
     expect(response.body.msg).toBe("Bad Request");
   });
 });
+
+describe("GET /api/articles", () => {
+  it("200: responds with all of the articles without body property and with comment_count property", async () => {
+    const response = await request(app).get("/api/articles");
+    expect(response.status).toBe(200);
+    response.body.articles.map((article) => {
+      expect(article).toHaveProperty("author");
+      expect(article).toHaveProperty("title");
+      expect(article).toHaveProperty("article_id");
+      expect(article).toHaveProperty("topic");
+      expect(article).toHaveProperty("created_at");
+      expect(article).toHaveProperty("votes");
+      expect(article).toHaveProperty("article_img_url");
+      expect(article).toHaveProperty("comment_count");
+    });
+    expect(response.body.articles).toBeSortedBy("created_at", {
+      descending: true,
+    });
+  });
+});
