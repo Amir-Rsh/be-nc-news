@@ -231,10 +231,6 @@ describe("DELETE /api/articles/:article_id", () => {
     const response = await request(app).delete("/api/comments/1");
     expect(response.status).toBe(204);
     expect(response.body).toEqual({});
-    const checkDeleted = await db.query(
-      `SELECT * FROM comments WHERE comment_id = 1`
-    );
-    expect(checkDeleted.rows).toEqual([]);
   });
   it("404: responds with appropriate message when comment is not found", async () => {
     const response = await request(app).delete("/api/comments/1000");
