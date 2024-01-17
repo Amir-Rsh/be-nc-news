@@ -34,3 +34,15 @@ exports.checkArticleExists = async (article_id) => {
     return Promise.reject({ msg: "article not found" });
   }
 };
+
+exports.checkUserExists = async (username) => {
+  const result = await db.query(
+    `
+  SELECT * FROM users WHERE username = $1
+  `,
+    [username]
+  );
+  if (result.rows.length === 0) {
+    return Promise.reject({ msg: "username does not exist" });
+  }
+};

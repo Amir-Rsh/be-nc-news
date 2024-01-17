@@ -37,6 +37,9 @@ app.use((err, req, res, next) => {
   } else if (err.code === "23503") {
     res.status(400).send({ msg: "Bad Request" });
   }
+  if (err.msg === "username does not exist") {
+    res.status(404).send({ msg: err.msg });
+  }
 });
 
 module.exports = app;

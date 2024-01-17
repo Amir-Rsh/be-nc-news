@@ -81,6 +81,17 @@ describe("GET /api/articles", () => {
       expect(article).toHaveProperty("article_img_url");
       expect(article).toHaveProperty("comment_count");
     });
+    expect(response.body.articles[0]).toEqual({
+      article_id: 3,
+      article_img_url:
+        "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+      author: "icellusedkars",
+      comment_count: 2,
+      created_at: "2020-11-03T09:12:00.000Z",
+      title: "Eight pug gifs that remind me of mitch",
+      topic: "mitch",
+      votes: 0,
+    });
     expect(response.body.articles).toBeSortedBy("created_at", {
       descending: true,
     });
@@ -103,10 +114,15 @@ describe("GET /api/articles/:article_id/comments", () => {
     });
     expect(comments).toBeSortedBy("created_at");
   });
+  it("200: responds the comments for the requested article ordered by created_at", async () => {
+    const response = await request(app).get("/api/articles/7/comments");
+    expect(response.status).toBe(200);
+    expect(response.body.comments).toEqual([]);
+  });
   it("404: responds the appropriate message when article_id is valid but not in the database", async () => {
     const response = await request(app).get("/api/articles/999/comments");
     expect(response.status).toBe(404);
-    expect(response.body.msg).toBe("Not Found");
+    expect(response.body.msg).toBe("article not found");
   });
   it("400: responds the appropriate message when article_id is not valid", async () => {
     const response = await request(app).get("/api/articles/invalid/comments");
@@ -150,5 +166,14 @@ describe("POST /api/articles/:article_id/comments", () => {
       .send(newComment);
     expect(response.status).toBe(400);
     expect(response.body.msg).toBe("Bad Request");
+  });
+  it("404: responds with appropriate message when username does not exist", async () => {
+    const newComment = { username: "amir", body: "test body" };
+    const response = await request(app)
+      .post("/api/articles/10/comments")
+      .send(newComment);
+    console.log(response.body);
+    expect(response.status).toBe(404);
+    expect(response.body.msg).toBe("username does not exist");
   });
 });
