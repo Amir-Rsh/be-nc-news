@@ -46,3 +46,15 @@ exports.checkUserExists = async (username) => {
     return Promise.reject({ msg: "username does not exist" });
   }
 };
+
+exports.checkCommentExists = async (comment_id) => {
+  const result = await db.query(
+    `
+  SELECT * FROM comments WHERE comment_id = $1
+  `,
+    [comment_id]
+  );
+  if (result.rows.length === 0) {
+    return Promise.reject({ msg: "comment does not exist" });
+  }
+};

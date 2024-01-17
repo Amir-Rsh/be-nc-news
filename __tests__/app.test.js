@@ -224,3 +224,26 @@ describe("PATCH /api/articles/:article_id", () => {
     expect(response.body.msg).toBe("Bad Request");
   });
 });
+
+describe("DELETE /api/articles/:article_id", () => {
+  const patch = { inc_votes: 100 };
+  it("204: responds with no content", async () => {
+    const response = await request(app).delete("/api/comments/1");
+    expect(response.status).toBe(204);
+    expect(response.body).toEqual({});
+    const checkDeleted = await db.query(
+      `SELECT * FROM comments WHERE comment_id = 1`
+    );
+    expect(checkDeleted.rows).toEqual([]);
+  });
+  it("404: responds with appropriate message when comment is not found", async () => {
+    const response = await request(app).delete("/api/comments/1000");
+    expect(response.status).toBe(404);
+    expect(response.body.msg).toBe("comment does not exist");
+  });
+  it("400: responds with appropriate message when comment_id is invalid", async () => {
+    const response = await request(app).delete("/api/comments/invalid");
+    expect(response.status).toBe(400);
+    expect(response.body.msg).toBe("Bad Request");
+  });
+});

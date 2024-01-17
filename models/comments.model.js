@@ -33,3 +33,12 @@ exports.postCommentsById = async (article_id, postedComment) => {
 
   return newComment.rows[0];
 };
+
+exports.deleteCommentById = async (comment_id) => {
+  const removedComment = await db.query(
+    `
+  DELETE FROM comments WHERE comment_id = $1
+  `,
+    [comment_id]
+  );
+};

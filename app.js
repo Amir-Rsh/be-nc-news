@@ -9,6 +9,7 @@ const {
 const {
   getCommentsById,
   postComments,
+  removeCommentById,
 } = require("./controllers/comments.controller");
 const app = express();
 app.use(express.json());
@@ -27,6 +28,8 @@ app.post("/api/articles/:article_id/comments", postComments);
 
 app.patch("/api/articles/:article_id", patchArticlesById);
 
+app.delete("/api/comments/:comment_id", removeCommentById);
+
 app.use((err, req, res, next) => {
   if (err.msg === "Not Found") {
     res.status(404).send({ msg: err.msg });
@@ -41,6 +44,9 @@ app.use((err, req, res, next) => {
     res.status(400).send({ msg: "Bad Request" });
   }
   if (err.msg === "username does not exist") {
+    res.status(404).send({ msg: err.msg });
+  }
+  if (err.msg === "comment does not exist") {
     res.status(404).send({ msg: err.msg });
   }
   // console.log(err);
