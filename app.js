@@ -11,6 +11,7 @@ const {
   postComments,
   removeCommentById,
 } = require("./controllers/comments.controller");
+const { getUsers } = require("./controllers/users.controller");
 const app = express();
 app.use(express.json());
 
@@ -29,6 +30,8 @@ app.post("/api/articles/:article_id/comments", postComments);
 app.patch("/api/articles/:article_id", patchArticlesById);
 
 app.delete("/api/comments/:comment_id", removeCommentById);
+
+app.get("/api/users", getUsers);
 
 app.use((err, req, res, next) => {
   if (err.msg === "Not Found") {

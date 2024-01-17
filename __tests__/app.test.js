@@ -243,3 +243,22 @@ describe("DELETE /api/articles/:article_id", () => {
     expect(response.body.msg).toBe("Bad Request");
   });
 });
+
+describe("GET /api/users", () => {
+  it("200: responds with all of the users", async () => {
+    const response = await request(app).get("/api/users");
+    expect(response.status).toBe(200);
+    expect(response.body.users.length).toBe(4);
+    response.body.users.map((user) => {
+      expect(user).toHaveProperty("username");
+      expect(user).toHaveProperty("avatar_url");
+      expect(user).toHaveProperty("name");
+    });
+    expect(response.body.users[0]).toEqual({
+      username: "butter_bridge",
+      name: "jonny",
+      avatar_url:
+        "https://www.healthytherapies.com/wp-content/uploads/2016/06/Lime3.jpg",
+    });
+  });
+});
