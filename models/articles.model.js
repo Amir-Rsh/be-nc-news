@@ -8,9 +8,7 @@ exports.fetchArticleById = async (article_id) => {
  `,
     [article_id]
   );
-  if (article.rows.length === 0) {
-    return Promise.reject({ msg: "Not Found" });
-  }
+
   return { article: article.rows[0] };
 };
 
@@ -28,9 +26,6 @@ exports.fetchArticles = async (article_id) => {
  `
   );
 
-  if (articles.rows.length === 0) {
-    return Promise.reject({ msg: "Not Found" });
-  }
   const addCommentCount = articles.rows.map((article) => {
     let commentCount = 0;
     comments.rows.map((comment) => {
@@ -44,18 +39,12 @@ exports.fetchArticles = async (article_id) => {
 };
 
 exports.articlePatcher = async (article_id, inc_votes) => {
-  const oldVotes = await db.query(
-    `
-  SELECT votes FROM articles WHERE article_id = $1
-  `,
-    [article_id]
-  );
   const insertVotes = await db.query(
     `
-  UPDATE articles SET votes = $1
+  UPDATE articles SET votes = votes + $1
   WHERE article_id = $2
   `,
-    [oldVotes.rows[0].votes + inc_votes, article_id]
+    [inc_votes, article_id]
   );
   const result = await db.query(
     `

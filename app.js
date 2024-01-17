@@ -43,6 +43,7 @@ app.use((err, req, res, next) => {
   if (err.msg === "username does not exist") {
     res.status(404).send({ msg: err.msg });
   }
+  // console.log(err);
 });
 
 module.exports = app;

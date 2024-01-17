@@ -57,7 +57,7 @@ describe("GET /api/articles/:article_id", () => {
   it("404: responds the appropriate message when article_id is valid but not in the database", async () => {
     const response = await request(app).get("/api/articles/999");
     expect(response.status).toBe(404);
-    expect(response.body.msg).toBe("Not Found");
+    expect(response.body.msg).toBe("article not found");
   });
   it("400: responds the appropriate message when article_id is not valid", async () => {
     const response = await request(app).get("/api/articles/invalid");
@@ -172,7 +172,6 @@ describe("POST /api/articles/:article_id/comments", () => {
     const response = await request(app)
       .post("/api/articles/10/comments")
       .send(newComment);
-    console.log(response.body);
     expect(response.status).toBe(404);
     expect(response.body.msg).toBe("username does not exist");
   });
