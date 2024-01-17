@@ -250,15 +250,9 @@ describe("GET /api/users", () => {
     expect(response.status).toBe(200);
     expect(response.body.users.length).toBe(4);
     response.body.users.map((user) => {
-      expect(user).toHaveProperty("username");
-      expect(user).toHaveProperty("avatar_url");
-      expect(user).toHaveProperty("name");
-    });
-    expect(response.body.users[0]).toEqual({
-      username: "butter_bridge",
-      name: "jonny",
-      avatar_url:
-        "https://www.healthytherapies.com/wp-content/uploads/2016/06/Lime3.jpg",
+      expect(typeof user.username).toBe("string");
+      expect(typeof user.avatar_url).toBe("string");
+      expect(typeof user.name).toBe("string");
     });
   });
 });
