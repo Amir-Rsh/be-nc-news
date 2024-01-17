@@ -225,7 +225,7 @@ describe("PATCH /api/articles/:article_id", () => {
   });
 });
 
-describe("DELETE /api/articles/:article_id", () => {
+describe("DELETE /api/comments/:comment_id", () => {
   const patch = { inc_votes: 100 };
   it("204: responds with no content", async () => {
     const response = await request(app).delete("/api/comments/1");
