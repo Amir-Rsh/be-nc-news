@@ -42,3 +42,26 @@ exports.fetchArticles = async (article_id) => {
   });
   return articles.rows;
 };
+
+exports.articlePatcher = async (article_id, inc_votes) => {
+  const oldVotes = await db.query(
+    `
+  SELECT votes FROM articles WHERE article_id = $1
+  `,
+    [article_id]
+  );
+  const insertVotes = await db.query(
+    `
+  UPDATE articles SET votes = $1
+  WHERE article_id = $2
+  `,
+    [oldVotes.rows[0].votes + inc_votes, article_id]
+  );
+  const result = await db.query(
+    `
+  SELECT * FROM articles WHERE article_id = $1
+  `,
+    [article_id]
+  );
+  return result.rows[0];
+};

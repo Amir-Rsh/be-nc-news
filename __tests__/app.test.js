@@ -177,3 +177,51 @@ describe("POST /api/articles/:article_id/comments", () => {
     expect(response.body.msg).toBe("username does not exist");
   });
 });
+
+describe("PATCH /api/articles/:article_id", () => {
+  const patch = { inc_votes: 100 };
+  it("200: responds with the patched article", async () => {
+    const response = await request(app).patch("/api/articles/1").send(patch);
+    expect(response.status).toBe(200);
+    const article = response.body.article;
+    expect(article.votes).toBe(200);
+    expect(article.title).toBe("Living in the shadow of a great man");
+    expect(article.topic).toBe("mitch");
+    expect(article.author).toBe("butter_bridge");
+    expect(article.body).toBe("I find this existence challenging");
+    expect(article.created_at).toBe("2020-07-09T20:11:00.000Z");
+    expect(article.article_img_url).toBe(
+      "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700"
+    );
+  });
+  it("404: responds with the appropriate message when article is not found", async () => {
+    const patch = { inc_votes: 100 };
+    const response = await request(app).patch("/api/articles/900").send(patch);
+    expect(response.status).toBe(404);
+    expect(response.body.msg).toBe("article not found");
+  });
+  it("400: responds with the appropriate message when article_id is invalid", async () => {
+    const patch = { inc_votes: 100 };
+    const response = await request(app)
+      .patch("/api/articles/invalid")
+      .send(patch);
+    expect(response.status).toBe(400);
+    expect(response.body.msg).toBe("Bad Request");
+  });
+  it("400: responds with the appropriate message when patch does not have inc_votes", async () => {
+    const patch = { no_votes: 100 };
+    const response = await request(app)
+      .patch("/api/articles/invalid")
+      .send(patch);
+    expect(response.status).toBe(400);
+    expect(response.body.msg).toBe("Bad Request");
+  });
+  it("400: responds with the appropriate message when inc_votes is invalid", async () => {
+    const patch = { inc_votes: "i'm invalid" };
+    const response = await request(app)
+      .patch("/api/articles/invalid")
+      .send(patch);
+    expect(response.status).toBe(400);
+    expect(response.body.msg).toBe("Bad Request");
+  });
+});
