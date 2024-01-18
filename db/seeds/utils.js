@@ -58,3 +58,15 @@ exports.checkCommentExists = async (comment_id) => {
     return Promise.reject({ msg: "comment does not exist" });
   }
 };
+
+exports.checkTopicExists = async (topic) => {
+  const result = await db.query(
+    `
+  SELECT * FROM articles WHERE topic = $1
+  `,
+    [topic]
+  );
+  if (result.rows.length === 0) {
+    return Promise.reject({ msg: "topic does not exist" });
+  }
+};

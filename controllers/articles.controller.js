@@ -18,7 +18,8 @@ exports.getArticleById = async (req, res, next) => {
 
 exports.getArticles = async (req, res, next) => {
   try {
-    const articles = await fetchArticles();
+    const { topic } = req.query;
+    const articles = await fetchArticles(topic);
     return res.status(200).send({ articles });
   } catch (err) {
     next(err);

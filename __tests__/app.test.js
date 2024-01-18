@@ -256,3 +256,18 @@ describe("GET /api/users", () => {
     });
   });
 });
+
+describe("GET /api/articles?topic=...", () => {
+  it("200: responds with articles on the requested topic", async () => {
+    const response = await request(app).get("/api/articles?topic=mitch");
+    expect(response.status).toBe(200);
+    response.body.articles.forEach((article) => {
+      expect(article.topic).toBe("mitch");
+    });
+  });
+  it("404: responds with appropriate message when topic is not found", async () => {
+    const response = await request(app).get("/api/articles?topic=not_a_topic");
+    expect(response.status).toBe(404);
+    expect(response.body.msg).toBe("topic does not exist");
+  });
+});
