@@ -42,7 +42,7 @@ describe("GET /api/articles/:article_id", () => {
   it("200: responds the requested article", async () => {
     const response = await request(app).get("/api/articles/1");
     expect(response.status).toBe(200);
-    const foundArticle = response.body.article.article;
+    const foundArticle = response.body.article;
     expect(foundArticle.article_id).toBe(1);
     expect(foundArticle.title).toBe("Living in the shadow of a great man");
     expect(foundArticle.topic).toBe("mitch");
@@ -274,5 +274,40 @@ describe("GET /api/articles?topic=...", () => {
     const response = await request(app).get("/api/articles?topic=not_a_topic");
     expect(response.status).toBe(404);
     expect(response.body.msg).toBe("topic does not exist");
+  });
+});
+
+describe("GET /api/articles/:article_id?comment_count", () => {
+  it("200: responds with requested article and its comment_count", async () => {
+    const response = await request(app).get("/api/articles/1?comment_count");
+    expect(response.status).toBe(200);
+    expect(response.body.article).toEqual({
+      article_id: 1,
+      article_img_url:
+        "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+      author: "butter_bridge",
+      body: "I find this existence challenging",
+      created_at: "2020-07-09T20:11:00.000Z",
+      title: "Living in the shadow of a great man",
+      topic: "mitch",
+      votes: 100,
+      comment_count: 11,
+    });
+  });
+  it("200: responds with requested article and its comment_count when no comment is found", async () => {
+    const response = await request(app).get("/api/articles/7?comment_count");
+    expect(response.status).toBe(200);
+    expect(response.body.article).toEqual({
+      article_id: 7,
+      article_img_url:
+        "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+      author: "icellusedkars",
+      body: "I was hungry.",
+      comment_count: 0,
+      created_at: "2020-01-07T14:08:00.000Z",
+      title: "Z",
+      topic: "mitch",
+      votes: 0,
+    });
   });
 });

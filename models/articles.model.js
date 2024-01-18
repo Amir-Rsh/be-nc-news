@@ -1,7 +1,7 @@
 const db = require("../db/connection");
 const { checkTopicExists } = require("../db/seeds/utils");
 
-exports.fetchArticleById = async (article_id) => {
+exports.fetchArticleById = async (article_id, queries) => {
   const article = await db.query(
     `
  SELECT * FROM articles 
@@ -9,8 +9,21 @@ exports.fetchArticleById = async (article_id) => {
  `,
     [article_id]
   );
-
-  return { article: article.rows[0] };
+  if (queries.hasOwnProperty("comment_count")) {
+    const comments = await db.query(
+      `
+ SELECT article_id FROM comments 
+ `
+    );
+    let commentCount = 0;
+    comments.rows.forEach((comment) => {
+      if (comment.article_id === article.rows[0].article_id) {
+        commentCount += 1;
+      }
+    });
+    article.rows[0].comment_count = commentCount;
+  }
+  return article.rows[0];
 };
 
 exports.fetchArticles = async (topic) => {

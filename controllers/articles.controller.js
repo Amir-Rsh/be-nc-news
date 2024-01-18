@@ -7,9 +7,11 @@ const {
 
 exports.getArticleById = async (req, res, next) => {
   try {
+    const queries = req.query;
     const { article_id } = req.params;
     const articleCheck = await checkArticleExists(article_id);
-    const article = await fetchArticleById(article_id);
+    const article = await fetchArticleById(article_id, queries);
+
     return res.status(200).send({ article });
   } catch (err) {
     next(err);
