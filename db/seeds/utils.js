@@ -62,7 +62,7 @@ exports.checkCommentExists = async (comment_id) => {
 exports.checkTopicExists = async (topic) => {
   const result = await db.query(
     `
-  SELECT * FROM articles WHERE topic = $1
+  SELECT * FROM topics WHERE slug = $1
   `,
     [topic]
   );

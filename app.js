@@ -36,19 +36,13 @@ app.get("/api/users", getUsers);
 app.use((err, req, res, next) => {
   if (err.code === "22P02") {
     res.status(400).send({ msg: "Bad Request" });
-  }
-  if (
-    err.msg === "article not found" ||
-    err.msg === "Not Found" ||
-    err.msg === "username does not exist" ||
-    err.msg === "comment does not exist" ||
-    err.msg === "topic does not exist"
-  ) {
-    res.status(404).send({ msg: err.msg });
-  } else if (err.code === "23502") {
-    res.status(400).send({ msg: "Bad Request. Missing properties." });
   } else if (err.code === "23503") {
     res.status(400).send({ msg: "Bad Request" });
+  } else if (err.code === "23502") {
+    res.status(400).send({ msg: "Bad Request. Missing properties." });
+  }
+  if (err.msg) {
+    res.status(404).send({ msg: err.msg });
   }
   // console.log(err);
 });

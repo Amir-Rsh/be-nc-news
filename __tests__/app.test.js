@@ -265,6 +265,11 @@ describe("GET /api/articles?topic=...", () => {
       expect(article.topic).toBe("mitch");
     });
   });
+  it("200: responds with empty array when no article on the requested topic is found", async () => {
+    const response = await request(app).get("/api/articles?topic=paper");
+    expect(response.status).toBe(200);
+    expect(response.body.articles).toEqual([]);
+  });
   it("404: responds with appropriate message when topic is not found", async () => {
     const response = await request(app).get("/api/articles?topic=not_a_topic");
     expect(response.status).toBe(404);
