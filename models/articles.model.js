@@ -4,25 +4,26 @@ const { checkTopicExists } = require("../db/seeds/utils");
 exports.fetchArticleById = async (article_id, queries) => {
   const article = await db.query(
     `
- SELECT * FROM articles 
- WHERE article_id = $1
- `,
+    SELECT articles.*
+    FROM articles 
+    WHERE articles.article_id = $1
+    `,
     [article_id]
   );
   if (queries.hasOwnProperty("comment_count")) {
-    const comments = await db.query(
+    const queriedArticle = await db.query(
       `
- SELECT article_id FROM comments 
- `
+      SELECT articles.*, COUNT(comment_id) AS comment_count
+      FROM articles 
+      LEFT JOIN comments ON comments.article_id = articles.article_id
+      WHERE articles.article_id = $1
+      GROUP BY articles.article_id
+      `,
+      [article_id]
     );
-    let commentCount = 0;
-    comments.rows.forEach((comment) => {
-      if (comment.article_id === article.rows[0].article_id) {
-        commentCount += 1;
-      }
-    });
-    article.rows[0].comment_count = commentCount;
+    return queriedArticle.rows[0];
   }
+
   return article.rows[0];
 };
 

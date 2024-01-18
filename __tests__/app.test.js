@@ -291,7 +291,7 @@ describe("GET /api/articles/:article_id?comment_count", () => {
       title: "Living in the shadow of a great man",
       topic: "mitch",
       votes: 100,
-      comment_count: 11,
+      comment_count: "11",
     });
   });
   it("200: responds with requested article and its comment_count when no comment is found", async () => {
@@ -303,7 +303,7 @@ describe("GET /api/articles/:article_id?comment_count", () => {
         "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
       author: "icellusedkars",
       body: "I was hungry.",
-      comment_count: 0,
+      comment_count: "0",
       created_at: "2020-01-07T14:08:00.000Z",
       title: "Z",
       topic: "mitch",
