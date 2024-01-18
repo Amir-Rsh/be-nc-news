@@ -1,4 +1,5 @@
 const db = require("../db/connection");
+const { checkTopicExists } = require("../db/seeds/utils");
 
 exports.fetchArticleById = async (article_id) => {
   const article = await db.query(
@@ -12,13 +13,18 @@ exports.fetchArticleById = async (article_id) => {
   return { article: article.rows[0] };
 };
 
-exports.fetchArticles = async (article_id) => {
-  const articles = await db.query(
-    `
- SELECT author, title, article_id, topic, created_at, votes, article_img_url FROM articles 
- ORDER BY created_at DESC
- `
-  );
+exports.fetchArticles = async (topic) => {
+  let queryStr = `
+  SELECT author, title, article_id, topic, created_at, votes, article_img_url FROM articles
+  `;
+  const queryParameters = [];
+  if (topic) {
+    const topicChecker = await checkTopicExists(topic);
+    queryStr += " WHERE topic = $1";
+    queryParameters.push(topic);
+  }
+  queryStr += ` ORDER BY created_at DESC;`;
+  const articles = await db.query(queryStr, queryParameters);
 
   const comments = await db.query(
     `
