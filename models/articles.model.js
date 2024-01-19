@@ -43,10 +43,10 @@ exports.fetchArticles = async (
   ];
   const validOrderQueries = ["asc", "desc"];
   if (!validSortQueries.includes(sort_by)) {
-    return Promise.reject({ msg: "invalid sort_by query" });
+    return Promise.reject({ status: 400, msg: "invalid sort_by query" });
   }
   if (!validOrderQueries.includes(order)) {
-    return Promise.reject({ msg: "invalid order query" });
+    return Promise.reject({ status: 400, msg: "invalid order query" });
   }
   let queryStr = `
   SELECT articles.author, articles.title, articles.article_id, articles.topic, articles.created_at, articles.votes, articles.article_img_url, COUNT(comment_id) AS comment_count FROM articles

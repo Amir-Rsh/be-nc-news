@@ -31,7 +31,7 @@ exports.checkArticleExists = async (article_id) => {
     [article_id]
   );
   if (result.rows.length === 0) {
-    return Promise.reject({ msg: "article not found" });
+    return Promise.reject({ status: 404, msg: "article not found" });
   }
 };
 
@@ -43,7 +43,7 @@ exports.checkUserExists = async (username) => {
     [username]
   );
   if (result.rows.length === 0) {
-    return Promise.reject({ msg: "username does not exist" });
+    return Promise.reject({ status: 404, msg: "username does not exist" });
   }
 };
 
@@ -55,7 +55,7 @@ exports.checkCommentExists = async (comment_id) => {
     [comment_id]
   );
   if (result.rows.length === 0) {
-    return Promise.reject({ msg: "comment does not exist" });
+    return Promise.reject({ status: 404, msg: "comment does not exist" });
   }
 };
 
@@ -67,6 +67,6 @@ exports.checkTopicExists = async (topic) => {
     [topic]
   );
   if (result.rows.length === 0) {
-    return Promise.reject({ msg: "topic does not exist" });
+    return Promise.reject({ status: 404, msg: "topic does not exist" });
   }
 };

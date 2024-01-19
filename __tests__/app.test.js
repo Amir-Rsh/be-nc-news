@@ -249,7 +249,7 @@ describe("GET /api/users", () => {
     const response = await request(app).get("/api/users");
     expect(response.status).toBe(200);
     expect(response.body.users.length).toBe(4);
-    response.body.users.map((user) => {
+    response.body.users.forEach((user) => {
       expect(typeof user.username).toBe("string");
       expect(typeof user.avatar_url).toBe("string");
       expect(typeof user.name).toBe("string");
