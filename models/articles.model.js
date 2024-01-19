@@ -29,7 +29,8 @@ exports.fetchArticleById = async (article_id, queries) => {
 
 exports.fetchArticles = async (topic) => {
   let queryStr = `
-  SELECT author, title, article_id, topic, created_at, votes, article_img_url FROM articles
+  SELECT articles.author, articles.title, articles.article_id, articles.topic, articles.created_at, articles.votes, articles.article_img_url, COUNT(comment_id) AS comment_count FROM articles
+  LEFT JOIN comments ON comments.article_id = articles.article_id
   `;
   const queryParameters = [];
   if (topic) {
@@ -37,24 +38,9 @@ exports.fetchArticles = async (topic) => {
     queryStr += " WHERE topic = $1";
     queryParameters.push(topic);
   }
-  queryStr += ` ORDER BY created_at DESC;`;
+  queryStr += ` GROUP BY articles.article_id ORDER BY created_at DESC;`;
   const articles = await db.query(queryStr, queryParameters);
 
-  const comments = await db.query(
-    `
- SELECT article_id FROM comments 
- `
-  );
-
-  const addCommentCount = articles.rows.map((article) => {
-    let commentCount = 0;
-    comments.rows.map((comment) => {
-      if (comment.article_id === article.article_id) {
-        commentCount += 1;
-      }
-    });
-    article.comment_count = commentCount;
-  });
   return articles.rows;
 };
 
