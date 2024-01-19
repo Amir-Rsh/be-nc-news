@@ -41,6 +41,12 @@ app.use((err, req, res, next) => {
   } else if (err.code === "23502") {
     res.status(400).send({ msg: "Bad Request. Missing properties." });
   }
+  if (err.msg === "invalid sort_by query") {
+    res.status(400).send({ msg: err.msg });
+  }
+  if (err.msg === "invalid order query") {
+    res.status(400).send({ msg: err.msg });
+  }
   if (err.msg) {
     res.status(404).send({ msg: err.msg });
   }

@@ -311,3 +311,30 @@ describe("GET /api/articles/:article_id?comment_count", () => {
     });
   });
 });
+
+describe("GET /api/articles?sort_by?order", () => {
+  it("200: responds with all of the articles by the requested sort", async () => {
+    const response = await request(app).get("/api/articles?sort_by=article_id");
+    expect(response.status).toBe(200);
+    expect(response.body.articles).toBeSortedBy("article_id", {
+      descending: true,
+    });
+  });
+  it("200: responds with all of the articles by the requested order and sort", async () => {
+    const response = await request(app).get(
+      "/api/articles?sort_by=article_id&order=asc"
+    );
+    expect(response.status).toBe(200);
+    expect(response.body.articles).toBeSortedBy("article_id");
+  });
+  it("400: responds with appropriate message when sort_by query is invalid", async () => {
+    const response = await request(app).get("/api/articles?sort_by=invalid");
+    expect(response.status).toBe(400);
+    expect(response.body.msg).toBe("invalid sort_by query");
+  });
+  it("400: responds with appropriate message when order query is invalid", async () => {
+    const response = await request(app).get("/api/articles?order=invalid");
+    expect(response.status).toBe(400);
+    expect(response.body.msg).toBe("invalid order query");
+  });
+});
