@@ -1,4 +1,5 @@
-const { fetchUsers } = require("../models/users.model");
+const { checkUserExists } = require("../db/seeds/utils");
+const { fetchUsers, fetchUserByUsername } = require("../models/users.model");
 
 exports.getUsers = async (req, res, next) => {
   try {

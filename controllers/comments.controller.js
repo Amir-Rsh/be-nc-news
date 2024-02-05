@@ -1,8 +1,4 @@
-const {
-  checkArticleExists,
-  checkUserExists,
-  checkCommentExists,
-} = require("../db/seeds/utils");
+const { checkArticleExists, checkCommentExists } = require("../db/seeds/utils");
 const {
   fetchCommentsById,
   postCommentsById,

@@ -38,8 +38,8 @@ exports.checkArticleExists = async (article_id) => {
 exports.checkUserExists = async (username) => {
   const result = await db.query(
     `
-  SELECT * FROM users WHERE username = $1
-  `,
+    SELECT * FROM users WHERE username = $1
+    `,
     [username]
   );
   if (result.rows.length === 0) {
