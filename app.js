@@ -17,7 +17,8 @@ const {
   getUserByUsername,
 } = require("./controllers/users.controller");
 const app = express();
-app.use(cors(express.json()));
+app.use(cors());
+app.use(express.json());
 
 app.get("/api/topics", getTopics);
 
