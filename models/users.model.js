@@ -13,6 +13,7 @@ exports.fetchUsers = async () => {
 };
 
 exports.addUser = async (data) => {
+  const checkUser = await checkUserNotExists(data.username);
   if (
     typeof data.username !== "string" ||
     typeof data.name !== "string" ||
@@ -24,7 +25,6 @@ exports.addUser = async (data) => {
       msg: "details have not been provided",
     });
   }
-  const checkUser = await checkUserNotExists(data.username);
   const result = await db.query(
     `
   INSERT INTO users
@@ -38,7 +38,7 @@ exports.addUser = async (data) => {
   return result.rows[0];
 };
 
-exports.fetchUserByUsername = async (user_id) => {
+exports.fetchUserById = async (user_id) => {
   const checkUser = await checkUserIdExists(user_id);
 
   const result = await db.query(

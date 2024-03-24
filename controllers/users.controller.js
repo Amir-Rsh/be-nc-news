@@ -1,7 +1,7 @@
 const { checkUserExists } = require("../db/seeds/utils");
 const {
   fetchUsers,
-  fetchUserByUsername,
+  fetchUserByUserId,
   addUser,
 } = require("../models/users.model");
 
@@ -27,7 +27,7 @@ exports.postUser = async (req, res, next) => {
 exports.getUser = async (req, res, next) => {
   try {
     const { user_id } = req.params;
-    const user = await fetchUserByUsername(user_id);
+    const user = await fetchUserByUserId(user_id);
     return res.status(200).send({ user: user });
   } catch (err) {
     next(err);
