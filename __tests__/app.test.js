@@ -349,7 +349,7 @@ describe("POST /api/users", () => {
     };
     const response = await request(app).post("/api/users").send(newUser);
     expect(response.status).toBe(201);
-    expect(response.body.user[0]).toEqual(newUser);
+    expect(response.body.user).toEqual(newUser);
   });
   it("400: gives an error if username already exists", async () => {
     const newUser = {
@@ -372,5 +372,22 @@ describe("POST /api/users", () => {
 
     expect(response.status).toBe(400);
     expect(response.body.msg).toBe("details have not been provided");
+  });
+});
+
+describe("GET /api/users/:username", () => {
+  it("200: gets user by username", async () => {
+    const response = await request(app).get("/api/users/icellusedkars");
+    expect(response.status).toBe(200);
+    expect(response.body.user).toEqual({
+      username: "icellusedkars",
+      name: "sam",
+      avatar_url: "https://avatars2.githubusercontent.com/u/24604688?s=460&v=4",
+    });
+  });
+  it("404: gives an error if username does not exist", async () => {
+    const response = await request(app).get("/api/users/invalid");
+    expect(response.status).toBe(404);
+    expect(response.body.msg).toBe("username does not exist");
   });
 });

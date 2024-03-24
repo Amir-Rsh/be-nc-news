@@ -16,7 +16,9 @@ const {
   getUsers,
   getUserByUsername,
   postUser,
+  getUser,
 } = require("./controllers/users.controller");
+
 const app = express();
 app.use(cors());
 app.use(express.json());
@@ -40,6 +42,8 @@ app.delete("/api/comments/:comment_id", removeCommentById);
 app.get("/api/users", getUsers);
 
 app.post("/api/users", postUser);
+
+app.get("/api/users/:username", getUser);
 
 app.use((err, req, res, next) => {
   if (err.code === "22P02") {

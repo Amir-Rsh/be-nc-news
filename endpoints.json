@@ -111,5 +111,16 @@
         "avatar_url": "demo"
       }
     }
+  },
+  "GET /api/users/:username": {
+    "description": "serves an object of user requested",
+    "queries": [],
+    "exampleResponse": {
+      "user": {
+        "username": "demo",
+        "name": "demo",
+        "avatar_url": "demo"
+      }
+    }
   }
 }

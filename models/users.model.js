@@ -1,5 +1,5 @@
 const db = require("../db/connection");
-const { checkUserNotExists } = require("../db/seeds/utils");
+const { checkUserNotExists, checkUserExists } = require("../db/seeds/utils");
 
 exports.fetchUsers = async () => {
   const result = await db.query(`
@@ -30,5 +30,19 @@ exports.addUser = async (data) => {
   `,
     [data.username, data.name, data.avatar_url]
   );
-  return result.rows;
+  return result.rows[0];
+};
+
+exports.fetchUserByUsername = async (username) => {
+  const checkUser = await checkUserExists(username);
+
+  const result = await db.query(
+    `
+    SELECT users.*
+    FROM users
+    WHERE users.username = $1
+  `,
+    [username]
+  );
+  return result.rows[0];
 };
