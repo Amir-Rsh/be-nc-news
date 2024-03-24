@@ -1,5 +1,9 @@
 const db = require("../db/connection");
-const { checkUserNotExists, checkUserExists } = require("../db/seeds/utils");
+const {
+  checkUserNotExists,
+  checkUserExists,
+  checkUserIdExists,
+} = require("../db/seeds/utils");
 
 exports.fetchUsers = async () => {
   const result = await db.query(`
@@ -12,7 +16,8 @@ exports.addUser = async (data) => {
   if (
     typeof data.username !== "string" ||
     typeof data.name !== "string" ||
-    typeof data.avatar_url !== "string"
+    typeof data.avatar_url !== "string" ||
+    typeof data.user_id !== "string"
   ) {
     return Promise.reject({
       status: 400,
@@ -23,26 +28,26 @@ exports.addUser = async (data) => {
   const result = await db.query(
     `
   INSERT INTO users
-  (username, name, avatar_url)
+  (user_id, username, name, avatar_url)
   VALUES
-  ($1, $2, $3)
+  ($1, $2, $3, $4)
   RETURNING *
   `,
-    [data.username, data.name, data.avatar_url]
+    [data.user_id, data.username, data.name, data.avatar_url]
   );
   return result.rows[0];
 };
 
-exports.fetchUserByUsername = async (username) => {
-  const checkUser = await checkUserExists(username);
+exports.fetchUserByUsername = async (user_id) => {
+  const checkUser = await checkUserIdExists(user_id);
 
   const result = await db.query(
     `
     SELECT users.*
     FROM users
-    WHERE users.username = $1
+    WHERE users.user_id = $1
   `,
-    [username]
+    [user_id]
   );
   return result.rows[0];
 };

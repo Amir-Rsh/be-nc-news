@@ -346,6 +346,7 @@ describe("POST /api/users", () => {
       username: "johnny-boy",
       name: "john doe",
       avatar_url: "badUrl",
+      user_id: "asifh739461",
     };
     const response = await request(app).post("/api/users").send(newUser);
     expect(response.status).toBe(201);
@@ -356,6 +357,7 @@ describe("POST /api/users", () => {
       username: "johnny-boy",
       name: "john doe",
       avatar_url: "badUrl",
+      user_id: "asifh739461",
     };
     const firstPost = await request(app).post("/api/users").send(newUser);
     const response = await request(app).post("/api/users").send(newUser);
@@ -375,19 +377,21 @@ describe("POST /api/users", () => {
   });
 });
 
-describe("GET /api/users/:username", () => {
+describe("GET /api/users/:user_id", () => {
   it("200: gets user by username", async () => {
-    const response = await request(app).get("/api/users/icellusedkars");
+    const response = await request(app).get("/api/users/1");
     expect(response.status).toBe(200);
     expect(response.body.user).toEqual({
-      username: "icellusedkars",
-      name: "sam",
-      avatar_url: "https://avatars2.githubusercontent.com/u/24604688?s=460&v=4",
+      user_id: "1",
+      username: "butter_bridge",
+      name: "jonny",
+      avatar_url:
+        "https://www.healthytherapies.com/wp-content/uploads/2016/06/Lime3.jpg",
     });
   });
-  it("404: gives an error if username does not exist", async () => {
-    const response = await request(app).get("/api/users/invalid");
+  it("404: gives an error if id does not exist", async () => {
+    const response = await request(app).get("/api/users/9999");
     expect(response.status).toBe(404);
-    expect(response.body.msg).toBe("username does not exist");
+    expect(response.body.msg).toBe("user does not exist");
   });
 });

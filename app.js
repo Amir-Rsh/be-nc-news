@@ -43,7 +43,7 @@ app.get("/api/users", getUsers);
 
 app.post("/api/users", postUser);
 
-app.get("/api/users/:username", getUser);
+app.get("/api/users/:user_id", getUser);
 
 app.use((err, req, res, next) => {
   if (err.code === "22P02") {
