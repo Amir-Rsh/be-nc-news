@@ -100,5 +100,16 @@
         }
       ]
     }
+  },
+  "POST /api/users": {
+    "description": "serves an object of posted user",
+    "queries": [],
+    "exampleResponse": {
+      "user": {
+        "username": "demo",
+        "name": "demo",
+        "avatar_url": "demo"
+      }
+    }
   }
 }

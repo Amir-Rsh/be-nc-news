@@ -340,7 +340,7 @@ describe("GET /api/articles?sort_by?order", () => {
   });
 });
 
-describe.only("POST /api/users", () => {
+describe("POST /api/users", () => {
   it("201: adds a new user to the database", async () => {
     const newUser = {
       username: "johnny-boy",
