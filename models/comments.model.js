@@ -14,10 +14,7 @@ exports.fetchCommentsById = async (article_id) => {
 };
 
 exports.postCommentsById = async (article_id, postedComment) => {
-  if (
-    postedComment.hasOwnProperty("username") &&
-    typeof postedComment.username === "string"
-  ) {
+  if (typeof postedComment.username === "string") {
     const checkUser = await checkUserExists(postedComment.username);
   }
   const newComment = await db.query(

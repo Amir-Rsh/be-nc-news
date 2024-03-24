@@ -9,6 +9,7 @@ const {
   userData,
 } = require("../db/data/test-data/index");
 const fs = require("fs/promises");
+const Test = require("supertest/lib/test");
 
 beforeEach(async () => {
   await seed({ topicData, userData, articleData, commentData });
@@ -336,5 +337,40 @@ describe("GET /api/articles?sort_by?order", () => {
     const response = await request(app).get("/api/articles?order=invalid");
     expect(response.status).toBe(400);
     expect(response.body.msg).toBe("invalid order query");
+  });
+});
+
+describe.only("POST /api/users", () => {
+  it("201: adds a new user to the database", async () => {
+    const newUser = {
+      username: "johnny-boy",
+      name: "john doe",
+      avatar_url: "badUrl",
+    };
+    const response = await request(app).post("/api/users").send(newUser);
+    expect(response.status).toBe(201);
+    expect(response.body.user[0]).toEqual(newUser);
+  });
+  it("400: gives an error if username already exists", async () => {
+    const newUser = {
+      username: "johnny-boy",
+      name: "john doe",
+      avatar_url: "badUrl",
+    };
+    const firstPost = await request(app).post("/api/users").send(newUser);
+    const response = await request(app).post("/api/users").send(newUser);
+
+    expect(response.status).toBe(400);
+    expect(response.body.msg).toBe("username already exists");
+  });
+  it("400: gives an error if all details have not been provided", async () => {
+    const newUser = {
+      name: "john doe",
+      avatar_url: "badUrl",
+    };
+    const response = await request(app).post("/api/users").send(newUser);
+
+    expect(response.status).toBe(400);
+    expect(response.body.msg).toBe("details have not been provided");
   });
 });

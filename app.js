@@ -15,6 +15,7 @@ const {
 const {
   getUsers,
   getUserByUsername,
+  postUser,
 } = require("./controllers/users.controller");
 const app = express();
 app.use(cors());
@@ -38,6 +39,8 @@ app.delete("/api/comments/:comment_id", removeCommentById);
 
 app.get("/api/users", getUsers);
 
+app.post("/api/users", postUser);
+
 app.use((err, req, res, next) => {
   if (err.code === "22P02") {
     res.status(400).send({ msg: "Bad Request" });
@@ -49,7 +52,7 @@ app.use((err, req, res, next) => {
   if (err.msg) {
     res.status(err.status).send({ msg: err.msg });
   }
-  // console.log(err);
+  console.log(err);
 });
 
 module.exports = app;
