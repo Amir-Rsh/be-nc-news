@@ -359,8 +359,12 @@ describe("POST /api/users", () => {
       avatar_url: "badUrl",
       user_id: "asifh739461",
     };
+    const newerUser = {
+      username: "johnny-boy",
+    };
+
     const firstPost = await request(app).post("/api/users").send(newUser);
-    const response = await request(app).post("/api/users").send(newUser);
+    const response = await request(app).post("/api/users").send(newerUser);
 
     expect(response.status).toBe(400);
     expect(response.body.msg).toBe("username already exists");
